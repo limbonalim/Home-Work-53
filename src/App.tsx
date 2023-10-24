@@ -36,6 +36,7 @@ const App = () => {
       return {...task};
     });
   };
+
   const createTask: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     const tasksCopy = getCopy();
@@ -49,10 +50,9 @@ const App = () => {
   };
 
   const deleteTask = (id) => {
-    const tasksCopy = getCopy();
-    tasksCopy.forEach((task, index) => {
-      if (id === task.id) {
-        tasksCopy.splice(index, 1);
+    const tasksCopy = currentTask.filter((task) => {
+      if (id !== task.id) {
+        return {...task};
       }
     });
     setCurrentTask(tasksCopy);
@@ -65,9 +65,11 @@ const App = () => {
   return (
     <div className="app">
       <AddTaskForm submitHandler={(event) => createTask(event)}/>
-      <div className="d-flex flex-column-reverse border border-secondary-subtle border-opacity-50 rounded px-1">
-        {tasksList}
-      </div>
+      {currentTask.length > 0 ?
+        <div className="d-flex flex-column-reverse border border-secondary-subtle border-opacity-50 rounded px-1">
+          {tasksList}
+        </div> : null
+      }
     </div>
   );
 };
