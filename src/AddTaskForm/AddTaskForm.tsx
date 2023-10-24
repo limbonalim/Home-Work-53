@@ -1,12 +1,10 @@
-import {Simulate} from 'react-dom/test-utils';
-import submit = Simulate.submit;
-import {EventHandler} from 'react';
+import React from 'react';
 
 interface TaskForm {
-  clickHandler: EventHandler<HTMLFormElement>
+  submitHandler: React.FormEventHandler<HTMLFormElement>;
 }
 
-const AddTaskForm = ({submitHandler}) => {
+const AddTaskForm: React.FC<TaskForm> = ({submitHandler}) => {
   return (
     <form action="" onSubmit={submitHandler}>
       <div className="form">
