@@ -6,13 +6,14 @@ import React, {useState} from 'react';
 interface Tasks {
   id: string;
   text: string;
+  done: boolean;
 }
 
 const App = () => {
   const [currentTask, setCurrentTask] = useState<Tasks[]>([
-    {id: 'Hello,World!', text: 'Hello, World!'},
-    {id: 'BuySome...', text: 'Go to market and buy some grocery'},
-    {id: 'GoTo...', text: 'Go to ...'},
+    {id: 'Hello,World!', text: 'Hello, World!', done: true},
+    {id: 'BuySome...', text: 'Go to market and buy some grocery', done: true},
+    {id: 'GoTo...', text: 'Go to ...', done: false},
   ]);
 
   const getRandom = (length: number): string => {
@@ -31,18 +32,18 @@ const App = () => {
     return `${date}/${getRandom(randomLength)}`;
   };
 
-  const getCopy = () => {
+  const getCopy = ():Tasks[] => {
     return currentTask.map(task => {
       return {...task};
     });
   };
-
   const createTask: React.FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     const tasksCopy = getCopy();
     const task = {
       id: `${getId()}`,
       text: `${event.target[0].value}`,
+      done: false,
     };
     tasksCopy.push(task);
     setCurrentTask(tasksCopy);
@@ -58,8 +59,23 @@ const App = () => {
     setCurrentTask(tasksCopy);
   };
 
+  const doneTask = (id) => {
+    let tasksCopy = getCopy();
+    tasksCopy.forEach((task) => {
+      if (id === task.id) {
+        let status = task.done;
+        task.done = !status;
+        return {...task};
+      } else {
+        return {...task};
+      }
+    });
+    setCurrentTask(tasksCopy);
+  };
+
   const tasksList = currentTask.map(task => {
-    return <Task key={task.id} text={task.text} clickHandler={() => deleteTask(task.id)}/>;
+    return <Task key={task.id} text={task.text} done={task.done} clickDeleteHandler={() => deleteTask(task.id)}
+                 clickDoneHandler={() => doneTask(task.id)}/>;
   });
 
   return (
