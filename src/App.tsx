@@ -32,7 +32,7 @@ const App = () => {
     return `${date}/${getRandom(randomLength)}`;
   };
 
-  const getCopy = ():Tasks[] => {
+  const getCopy = (): Tasks[] => {
     return currentTask.map(task => {
       return {...task};
     });
@@ -51,12 +51,11 @@ const App = () => {
   };
 
   const deleteTask = (id) => {
-    const tasksCopy = currentTask.filter((task) => {
-      if (id !== task.id) {
-        return {...task};
-      }
+    setCurrentTask(prevState => {
+      return prevState.filter((task) => {
+        return id !== task.id ? {...task} : false;
+      });
     });
-    setCurrentTask(tasksCopy);
   };
 
   const doneTask = (id) => {
